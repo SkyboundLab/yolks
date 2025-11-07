@@ -64,3 +64,6 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.NAME }}:java_${{ matrix.tag }}
+
+      - name: "Keep Alive"
+        uses: gautamkrishnar/keepalive-workflow@v2
