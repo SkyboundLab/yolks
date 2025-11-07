@@ -65,5 +65,10 @@ jobs:
           tags: |
             ghcr.io/${{ env.NAME }}:java_${{ matrix.tag }}
 
-      - name: "Keep Alive"
-        uses: gautamkrishnar/keepalive-workflow@v2
+  workflow-keepalive:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@v1
