@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021 Matthew Penner
+# Copyright (c) 2026 Pterodactyl
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,26 @@
 # SOFTWARE.
 #
 
-FROM        --platform=$TARGETOS/$TARGETARCH golang:1.17-alpine
+FROM 		--platform=$TARGETOS/$TARGETARCH ghcr.io/pterodactyl/yolks:java_25
 
-LABEL       author="Matthew Penner" maintainer="matthew@pterodactyl.io"
+LABEL       author="William V." maintainer="william.venner@infraly.co"
 
 LABEL       org.opencontainers.image.source="https://github.com/pterodactyl/yolks"
 LABEL       org.opencontainers.image.licenses=MIT
 
-RUN         apk add --update --no-cache ca-certificates tzdata \
-			&& adduser -D -h /home/container container
+USER		root
+
+COPY        --from=ghcr.io/pterodactyl/yolks:java_25 entrypoint.sh /java.sh
+RUN 		chmod +x /java.sh
+
+RUN			apt-get update -y \
+				&& apt-get install -y unzip jq \
+				&& rm -rf /var/lib/apt/lists/*
 
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
 
-ENV			YOLK_EOL_NAG_WARNING=1
+COPY 		./entrypoint.sh /entrypoint.sh
 
-COPY		--chmod=755 --chown=root:root ../entrypoint.sh /entrypoint.sh
-ENTRYPOINT	["/entrypoint.sh"]
+CMD         [ "/bin/bash", "/entrypoint.sh" ]
