@@ -14,6 +14,7 @@ RUN         apt-get update -y \
                 ca-certificates \
                 openssl \
                 git \
+                git-lfs \
                 tar \
                 sqlite3 \
                 fontconfig \
